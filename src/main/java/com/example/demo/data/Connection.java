@@ -3,15 +3,22 @@ package com.example.demo.data;
 import com.example.demo.data.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class Connection {
     private final UserRepository userRepository;
 
-    public Connection(@Autowired @Qualifier("default") UserRepository userRepository) {
-        this.userRepository = userRepository;
+//    public Connection(@Autowired @Qualifier("default") UserRepository userRepository) {
+//        this.userRepository = userRepository;
+//    }
+
+    public Connection() {
+        this.userRepository = UserRepository.getInstance();
     }
 
     public boolean transfer(String from, String to, long value) {
@@ -19,11 +26,15 @@ public class Connection {
             User userFrom = User.of(userRepository.get(from));
             User userTo = User.of(userRepository.get(to));
             try {
-                userRepository.minus(from, value);
+                if(!from.equals("external")){
+                    userRepository.minus(from, value);
+                }
                 userRepository.plus(to, value);
             } catch (Exception e) {
                 e.printStackTrace();
-                userRepository.put(userFrom);
+                if(!from.equals("external")){
+                    userRepository.put(userFrom);
+                }
                 userRepository.put(userTo);
                 return false;
             }

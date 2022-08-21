@@ -10,10 +10,10 @@ import org.springframework.context.annotation.Scope;
 @Configuration
 public class RepositoryConfiguration {
 
-    @Bean
-    @Qualifier("default")
-    @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    public UserRepository getRepo(){
-        return new UserRepository();
-    }
+//    @Bean
+//    @Qualifier("default")
+//    @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+//    public UserRepository getRepo(){
+//        return new UserRepository();
+//    }
 }
