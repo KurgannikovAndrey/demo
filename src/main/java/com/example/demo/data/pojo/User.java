@@ -3,9 +3,11 @@ package com.example.demo.data.pojo;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 @Data
 @NoArgsConstructor
-public class User {
+public class User extends ReentrantLock {
     private String name;
     private long value;
 

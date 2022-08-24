@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class MainController {
-    @PostMapping("add/{username}")
+    @PostMapping("{username}/add")
     public String addUser(@Autowired @Qualifier("configured") Connection connection, @PathVariable String username) {
         return connection.addUser(username) ? "success" : "fail";
     }
@@ -16,16 +16,15 @@ public class MainController {
     @PostMapping("transfer")
     public String addUser(@Autowired @Qualifier("configured") Connection connection, @RequestParam(name = "from") String from,
                           @RequestParam(name = "to") String to, @RequestParam(name = "value") int value) {
-        return value < 0 || connection.transfer(from, to, value) ? "success" : "fail";
+        return value < 0 || !connection.transfer(from, to, value) ? "fail" : "success";
     }
 
-    @GetMapping("balance/{username}")
+    @GetMapping("{username}/balance")
     public String getBalance(@Autowired @Qualifier("configured") Connection connection, @PathVariable String username) {
         long balance = 0;
         try {
             balance = connection.getBalance(username);
         } catch (Exception e) {
-            e.printStackTrace();
             return "fail";
         }
         return String.valueOf(balance);
